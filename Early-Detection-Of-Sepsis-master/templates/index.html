@@ -5,184 +5,361 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Early Detection Of Sepsis</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div class="container">
-            <div class="row">
-                <div class="col-md-12"  style="margin: 5px auto;">
-                    <h4>What is Sepsis??</h4>
-                    <p>Sepsis occurs when chemicals released in the bloodstream to fight an infection trigger inflammation throughout the body.
-                    This can cause a cascade of changes that damage multiple organ systems, leading them to fail, sometimes even resulting in death.</p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12"  style="margin: 5px auto; ">
-                    <h4 >Symptoms of Sepsis</h4>
-                    <ul>
-                        <li >Fever and chills</li>
-                        <li>Very low body temperature</li>
-                        <li>Peeing less than normal</li>
-                        <li>Nausea and vomiting</li>
-                        <li>Diarrhea</li>
-                    </ul>
-                </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6"  style="margin: 5px auto;">
-            <img class="center"
-            src="https://previews.123rf.com/images/shiyiershier/shiyiershier1306/shiyiershier130600006/20288181-disease-symptoms-01-fever-and-chills-headache-nausea-cough-expressions-boy.jpg"
-            alt="Symptoms of Sepsis" width="30%" height="100%">
-            </div>
-        </div>
     <h1>Clinical Data Collection</h1>
         <div class="row">
-            <div class="col-md-8" style="margin: 10px auto; ">
+            <div class="col-md-8" style="margin: 10px auto;">
                 <form action="/predict" method="post">
+                    <!-- Vital Signs Section -->
                     <h4>Vital Signs</h4>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="HR" placeholder="Heart Rate" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="O2Sat" placeholder="Pulse oximetry (%)" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="Temp" placeholder="Temperature (Deg C)" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="SBP" placeholder="Systolic BP (mm Hg)" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="MAT" placeholder="Mean arterial pressure (mm Hg)" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="DBP" placeholder="Diastolic BP (mm Hg)" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="Resp" placeholder="Respiration rate (breaths per minute)" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="EtCO2" placeholder="End tidal carbon dioxide (mm Hg)" min="0" step="0.01">
+                    <div class="form-section">
+                        <div class="section-container">
+                            <div class="input-with-threshold">
+                                <label style="color: #b0b0b0; font-size: 0.85rem; margin-bottom: 5px; display: block;">Heart Rate (beats/min)</label>
+                                <div class="input-wrapper">
+                                    <input class="form-control" type="number" name="HR" placeholder="60-100 bpm" min="0" step="0.01">
+                                    <span class="threshold-label normal" title="Normal: 60-100 bpm">60-100</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-container">
+                            <div class="input-with-threshold">
+                                <label style="color: #b0b0b0; font-size: 0.85rem; margin-bottom: 5px; display: block;">Pulse Oximetry (%)</label>
+                                <div class="input-wrapper">
+                                    <input class="form-control" type="number" name="O2Sat" placeholder="95-100%" min="0" step="0.01" max="100">
+                                    <span class="threshold-label normal" title="Normal: >95%">>95%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-container">
+                            <div class="input-with-threshold">
+                                <label style="color: #b0b0b0; font-size: 0.85rem; margin-bottom: 5px; display: block;">Temperature (°C)</label>
+                                <div class="input-wrapper">
+                                    <input class="form-control" type="number" name="Temp" placeholder="36.5-37.5" min="0" step="0.01">
+                                    <span class="threshold-label normal" title="Normal: 36.5-37.5°C">36.5-37.5</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-container">
+                            <div class="input-with-threshold">
+                                <label style="color: #b0b0b0; font-size: 0.85rem; margin-bottom: 5px; display: block;">Systolic BP (mm Hg)</label>
+                                <div class="input-wrapper">
+                                    <input class="form-control" type="number" name="SBP" placeholder="90-120" min="0" step="0.01">
+                                    <span class="threshold-label normal" title="Normal: 90-120 mm Hg">90-120</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-container">
+                            <div class="input-with-threshold">
+                                <label style="color: #b0b0b0; font-size: 0.85rem; margin-bottom: 5px; display: block;">Mean Arterial Pressure (mm Hg)</label>
+                                <div class="input-wrapper">
+                                    <input class="form-control" type="number" name="MAP" placeholder="70-100" min="0" step="0.01">
+                                    <span class="threshold-label normal" title="Normal: 70-100 mm Hg">70-100</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-container">
+                            <div class="input-with-threshold">
+                                <label style="color: #b0b0b0; font-size: 0.85rem; margin-bottom: 5px; display: block;">Diastolic BP (mm Hg)</label>
+                                <div class="input-wrapper">
+                                    <input class="form-control" type="number" name="DBP" placeholder="60-80" min="0" step="0.01">
+                                    <span class="threshold-label normal" title="Normal: 60-80 mm Hg">60-80</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-container">
+                            <div class="input-with-threshold">
+                                <label style="color: #b0b0b0; font-size: 0.85rem; margin-bottom: 5px; display: block;">Respiration Rate (breaths/min)</label>
+                                <div class="input-wrapper">
+                                    <input class="form-control" type="number" name="Resp" placeholder="12-20" min="0" step="0.01">
+                                    <span class="threshold-label normal" title="Normal: 12-20 breaths/min">12-20</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Laboratory Values -->
+                    <!-- Laboratory Values Section -->
                     <h4>Laboratory Values</h4>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="BaseExcess" placeholder="Measure of excess bicarbonate (mmol/L)" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="HCO3" placeholder="Bicarbonate (mmol/L)" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="FiO2" placeholder="Fraction of inspired oxygen (%)" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="pH" placeholder="N/A" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="PaCO2" placeholder="PaCO2" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="SaO2" placeholder="SaO2" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="AST" placeholder="AST" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="BUN" placeholder="BUN" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="Alkalinephos" placeholder="Alkalinephos" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="Calcium" placeholder="Calcium" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="Chloride" placeholder="Chloride" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="Creatinie" placeholder="Creatinie" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="Bilirubin_direct" placeholder="Bilirubin_direct" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="Glucose" placeholder="Glucose" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="Lactate" placeholder="Lactate" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="Magnesium" placeholder="Magnesium" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="Phosphate" placeholder="Phosphate" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="Potassium" placeholder="Potassium" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="Bilirubin_total" placeholder="Bilirubin_total" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="TroponinI" placeholder="TroponinI" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="Hct" placeholder="Hct" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="Hgb" placeholder="Hgb" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="PTT" placeholder="PTT" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="WBC" placeholder="WBC" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="Fibrinogen" placeholder="Fibrinogen" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="Platelets" placeholder="Platelets" min="0" step="0.01">
+                    <div class="form-section">
+                        <div class="section-container">
+                            <div class="input-with-threshold">
+                                <label style="color: #b0b0b0; font-size: 0.85rem; margin-bottom: 5px; display: block;">Base Excess (mmol/L)</label>
+                                <div class="input-wrapper">
+                                    <input class="form-control" type="number" name="BaseExcess" placeholder="-3 to +3" step="0.01">
+                                    <span class="threshold-label normal" title="Normal: -3 to +3">-3 to +3</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-container">
+                            <div class="input-with-threshold">
+                                <label style="color: #b0b0b0; font-size: 0.85rem; margin-bottom: 5px; display: block;">Bicarbonate (mmol/L)</label>
+                                <div class="input-wrapper">
+                                    <input class="form-control" type="number" name="HCO3" placeholder="22-26" step="0.01">
+                                    <span class="threshold-label normal" title="Normal: 22-26">22-26</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-container">
+                            <div class="input-with-threshold">
+                                <label style="color: #b0b0b0; font-size: 0.85rem; margin-bottom: 5px; display: block;">Fraction of Inspired O₂ (%)</label>
+                                <div class="input-wrapper">
+                                    <input class="form-control" type="number" name="FiO2" placeholder="21" min="0" step="0.01" max="100">
+                                    <span class="threshold-label normal" title="Normal: 21% (room air)">21%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-container">
+                            <div class="input-with-threshold">
+                                <label style="color: #b0b0b0; font-size: 0.85rem; margin-bottom: 5px; display: block;">PaCO₂ (mm Hg)</label>
+                                <div class="input-wrapper">
+                                    <input class="form-control" type="number" name="PaCO2" placeholder="35-45" step="0.01">
+                                    <span class="threshold-label normal" title="Normal: 35-45">35-45</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-container">
+                            <div class="input-with-threshold">
+                                <label style="color: #b0b0b0; font-size: 0.85rem; margin-bottom: 5px; display: block;">SaO₂ (%)</label>
+                                <div class="input-wrapper">
+                                    <input class="form-control" type="number" name="SaO2" placeholder="95-100%" min="0" step="0.01" max="100">
+                                    <span class="threshold-label normal" title="Normal: >95%">>95%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-container">
+                            <div class="input-with-threshold">
+                                <label style="color: #b0b0b0; font-size: 0.85rem; margin-bottom: 5px; display: block;">Creatinine (mg/dL)</label>
+                                <div class="input-wrapper">
+                                    <input class="form-control" type="number" name="Creatinine" placeholder="0.7-1.3" step="0.01">
+                                    <span class="threshold-label normal" title="Normal: 0.7-1.3">0.7-1.3</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-container">
+                            <div class="input-with-threshold">
+                                <label style="color: #b0b0b0; font-size: 0.85rem; margin-bottom: 5px; display: block;">Bilirubin Direct (mg/dL)</label>
+                                <div class="input-wrapper">
+                                    <input class="form-control" type="number" name="Bilirubin_direct" placeholder="0.0-0.3" step="0.01">
+                                    <span class="threshold-label normal" title="Normal: 0.0-0.3">0.0-0.3</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-container">
+                            <div class="input-with-threshold">
+                                <label style="color: #b0b0b0; font-size: 0.85rem; margin-bottom: 5px; display: block;">Glucose (mg/dL)</label>
+                                <div class="input-wrapper">
+                                    <input class="form-control" type="number" name="Glucose" placeholder="70-100" step="0.01">
+                                    <span class="threshold-label normal" title="Normal: 70-100">70-100</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-container">
+                            <div class="input-with-threshold">
+                                <label style="color: #b0b0b0; font-size: 0.85rem; margin-bottom: 5px; display: block;">Lactate (mmol/L)</label>
+                                <div class="input-wrapper">
+                                    <input class="form-control" type="number" name="Lactate" placeholder="0.5-2.0" step="0.01">
+                                    <span class="threshold-label normal" title="Normal: 0.5-2.0">0.5-2.0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-container">
+                            <div class="input-with-threshold">
+                                <label style="color: #b0b0b0; font-size: 0.85rem; margin-bottom: 5px; display: block;">Magnesium (mg/dL)</label>
+                                <div class="input-wrapper">
+                                    <input class="form-control" type="number" name="Magnesium" placeholder="1.7-2.2" step="0.01">
+                                    <span class="threshold-label normal" title="Normal: 1.7-2.2">1.7-2.2</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-container">
+                            <div class="input-with-threshold">
+                                <label style="color: #b0b0b0; font-size: 0.85rem; margin-bottom: 5px; display: block;">Phosphate (mg/dL)</label>
+                                <div class="input-wrapper">
+                                    <input class="form-control" type="number" name="Phosphate" placeholder="2.5-4.5" step="0.01">
+                                    <span class="threshold-label normal" title="Normal: 2.5-4.5">2.5-4.5</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-container">
+                            <div class="input-with-threshold">
+                                <label style="color: #b0b0b0; font-size: 0.85rem; margin-bottom: 5px; display: block;">Bilirubin Total (mg/dL)</label>
+                                <div class="input-wrapper">
+                                    <input class="form-control" type="number" name="Bilirubin_total" placeholder="0.1-1.2" step="0.01">
+                                    <span class="threshold-label normal" title="Normal: 0.1-1.2">0.1-1.2</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-container">
+                            <div class="input-with-threshold">
+                                <label style="color: #b0b0b0; font-size: 0.85rem; margin-bottom: 5px; display: block;">Hemoglobin (g/dL)</label>
+                                <div class="input-wrapper">
+                                    <input class="form-control" type="number" name="Hgb" placeholder="13.5-17.5" step="0.01">
+                                    <span class="threshold-label normal" title="Normal M: 13.5-17.5">13.5-17.5</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-container">
+                            <div class="input-with-threshold">
+                                <label style="color: #b0b0b0; font-size: 0.85rem; margin-bottom: 5px; display: block;">WBC (10³/µL)</label>
+                                <div class="input-wrapper">
+                                    <input class="form-control" type="number" name="WBC" placeholder="4.5-11" step="0.01">
+                                    <span class="threshold-label normal" title="Normal: 4.5-11">4.5-11</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-container">
+                            <div class="input-with-threshold">
+                                <label style="color: #b0b0b0; font-size: 0.85rem; margin-bottom: 5px; display: block;">Fibrinogen (mg/dL)</label>
+                                <div class="input-wrapper">
+                                    <input class="form-control" type="number" name="Fibrinogen" placeholder="200-400" step="0.01">
+                                    <span class="threshold-label normal" title="Normal: 200-400">200-400</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-container">
+                            <div class="input-with-threshold">
+                                <label style="color: #b0b0b0; font-size: 0.85rem; margin-bottom: 5px; display: block;">Platelets (10³/µL)</label>
+                                <div class="input-wrapper">
+                                    <input class="form-control" type="number" name="Platelets" placeholder="150-400" step="0.01">
+                                    <span class="threshold-label normal" title="Normal: 150-400">150-400</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
+                    <!-- Demographics Section -->
                     <h4>Demographics</h4>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="Age" placeholder="Age (100 for above 90 years)" min="0" step="0.01">
+                    <div class="form-section">
+                        <div class="section-container">
+                            <div class="input-with-threshold">
+                                <label style="color: #b0b0b0; font-size: 0.85rem; margin-bottom: 5px; display: block;">Age (years)</label>
+                                <div class="input-wrapper">
+                                    <input class="form-control" type="number" name="Age" placeholder="Enter age (100 for >90)" min="0" step="0.01">
+                                    <span class="threshold-label" style="color: #b0b0b0;" title="Years of age">Age</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-container">
+                            <div class="input-with-threshold">
+                                <label style="color: #b0b0b0; font-size: 0.85rem; margin-bottom: 5px; display: block;">Gender</label>
+                                <div class="input-wrapper">
+                                    <input class="form-control" type="number" name="Gender" placeholder="0=Female, 1=Male" min="0" step="1" max="1">
+                                    <span class="threshold-label" style="color: #b0b0b0;" title="0=Female, 1=Male">0/1</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-container">
+                            <div class="input-with-threshold">
+                                <label style="color: #b0b0b0; font-size: 0.85rem; margin-bottom: 5px; display: block;">Hours: Hospital to ICU</label>
+                                <div class="input-wrapper">
+                                    <input class="form-control" type="number" name="HospAdmTime" placeholder="Hours" min="0" step="0.01">
+                                    <span class="threshold-label" style="color: #b0b0b0;" title="Hours between admission and ICU">Hours</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-container">
+                            <div class="input-with-threshold">
+                                <label style="color: #b0b0b0; font-size: 0.85rem; margin-bottom: 5px; display: block;">ICU Length of Stay (hours)</label>
+                                <div class="input-wrapper">
+                                    <input class="form-control" type="number" name="ICULOS" placeholder="Hours in ICU" min="0" step="0.01">
+                                    <span class="threshold-label" style="color: #b0b0b0;" title="Hours in ICU">Hours</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="Gender" placeholder="Female(0) or Male(1)" min="0" step="1" max="1">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="Unit1" placeholder="Administrative identifier for ICU unit (MICU)" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="Unit2" placeholder="Administrative identifier for ICU unit (SICU)" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="HospAdmTime" placeholder="Hrs b/w hospital admit and ICU admit" min="0" step="0.01">
-                    </div>
-                    <div class="form=group" style="margin: 10px auto;">
-                        <input class="form-control" type="number" name="ICULOS" placeholder="ICU length-of-stay (hours since ICU admit)" min="0" step="0.01">
-                    </div>
+
                     <!-- Submit Button -->
-                  <!--  <div class="form-group"  style="margin: 10px auto;">
-                        <button class="btn btn-lg btn-primary btn-block">Submit!</button>
-                    </div>-->
-                    <button type="submit" data-toggle="modal" data-target="#exampleModal" class="btn btn-primary btn-lg ">Predict</button></div>
+                    <div style="display: flex; justify-content: center; margin-top: 30px;">
+                        <button type="submit" class="btn btn-primary btn-lg">Predict Sepsis Risk</button>
+                    </div>
                 </form>
             </div>
         </div>
-        <div id="result">
-		<div class="col-lg-12 " >
-						<p style="font-size:20px"><b>1 is SEPSIS, 0 is NO SEPSIS:</b> </p>
-						<samp>{{ prediction_text }}</samp></div>
-						</div></div>
- </div>
-    </div>
 
+        <!-- Results Section -->
+        <div id="result">
+            <div class="col-lg-12">
+                <p style="font-size:20px"><b>Risk Assessment:</b> </p>
+                <samp>{{ prediction_text }}</samp>
+                {% if confidence %}
+                <p style="margin-top: 10px; font-size: 0.95rem;"><b>Confidence:</b> <span style="color: #ffd700;">{{ confidence }}</span></p>
+                {% endif %}
+            </div>
+
+            <!-- Explainability Section -->
+            {% if explanation %}
+            <div class="col-lg-12" style="margin-top: 20px;">
+                <h4 style="color: #ffd700; margin-bottom: 15px;">Model Explanation</h4>
+                {{ explanation | safe }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
+    <script>
+        // Store form values in localStorage when form is submitted
+        document.querySelector('form').addEventListener('submit', function() {
+            const formData = new FormData(this);
+            const values = {};
+            for (let [key, value] of formData.entries()) {
+                values[key] = value;
+            }
+            localStorage.setItem('formValues', JSON.stringify(values));
+        });
+        
+        // Restore form values from localStorage on page load
+        window.addEventListener('load', function() {
+            const savedValues = localStorage.getItem('formValues');
+            if (savedValues) {
+                const values = JSON.parse(savedValues);
+                for (let [key, value] of Object.entries(values)) {
+                    const input = document.querySelector(`input[name="${key}"]`);
+                    if (input) {
+                        input.value = value;
+                    }
+                }
+            }
+        });
+        
+        // Scroll to results section when prediction is made
+        window.addEventListener('load', function() {
+            const resultDiv = document.getElementById('result');
+            const prediction = document.querySelector('samp');
+            if (prediction && prediction.textContent.trim() !== '') {
+                resultDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    </script>
 </body>
 </html>
