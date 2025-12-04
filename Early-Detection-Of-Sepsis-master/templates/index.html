@@ -279,8 +279,8 @@
                             <div class="input-icon"><i class="fas fa-clock"></i></div>
                             <div class="input-field">
                                 <label>Hospital to ICU</label>
-                                <input class="form-control" type="number" name="HospAdmTime" placeholder="Hours" min="0" step="0.01">
-                                <span class="input-hint">Hours</span>
+                                <input class="form-control" type="number" name="HospAdmTime" placeholder="Hours" min="0" max="999" step="0.01">
+                                <span class="input-hint">Hours (positive)</span>
                             </div>
                         </div>
 
@@ -288,8 +288,8 @@
                             <div class="input-icon"><i class="fas fa-hourglass-end"></i></div>
                             <div class="input-field">
                                 <label>ICU Length of Stay</label>
-                                <input class="form-control" type="number" name="ICULOS" placeholder="Hours in ICU" min="0" step="0.01">
-                                <span class="input-hint">Hours in ICU</span>
+                                <input class="form-control" type="number" name="ICULOS" placeholder="Hours in ICU" min="0" max="999" step="0.01">
+                                <span class="input-hint">Hours in ICU (positive)</span>
                             </div>
                         </div>
                     </div>
@@ -299,6 +299,9 @@
                 <div class="button-group">
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-stethoscope"></i> Predict Sepsis Risk
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="generateRandomValues()">
+                        <i class="fas fa-dice"></i> Generate Random Values
                     </button>
                     <button type="button" class="btn btn-secondary" onclick="resetForm()">
                         <i class="fas fa-redo"></i> Clear Form
@@ -336,9 +339,205 @@
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <script>
+        // Normal ranges for each field
+        const normalRanges = {
+            // Vital Signs
+            'HR': { min: 60, max: 100, label: 'beats/min' },
+            'O2Sat': { min: 95, max: 100, label: '%' },
+            'Temp': { min: 36.5, max: 37.5, label: '°C' },
+            'SBP': { min: 90, max: 120, label: 'mmHg' },
+            'MAP': { min: 70, max: 100, label: 'mmHg' },
+            'DBP': { min: 60, max: 80, label: 'mmHg' },
+            'Resp': { min: 12, max: 20, label: 'breaths/min' },
+            
+            // Laboratory Values
+            'BaseExcess': { min: -3, max: 3, label: 'mmol/L' },
+            'HCO3': { min: 22, max: 26, label: 'mmol/L' },
+            'FiO2': { min: 21, max: 100, label: '%' },
+            'PaCO2': { min: 35, max: 45, label: 'mmHg' },
+            'SaO2': { min: 95, max: 100, label: '%' },
+            'Creatinine': { min: 0.7, max: 1.3, label: 'mg/dL' },
+            'Bilirubin_direct': { min: 0.0, max: 0.3, label: 'mg/dL' },
+            'Glucose': { min: 70, max: 100, label: 'mg/dL' },
+            'Lactate': { min: 0.5, max: 2.0, label: 'mmol/L' },
+            'Magnesium': { min: 1.7, max: 2.2, label: 'mg/dL' },
+            'Phosphate': { min: 2.5, max: 4.5, label: 'mg/dL' },
+            'Bilirubin_total': { min: 0.1, max: 1.2, label: 'mg/dL' },
+            'Hgb': { min: 13.5, max: 17.5, label: 'g/dL' },
+            'WBC': { min: 4.5, max: 11, label: 'K/µL' },
+            'Fibrinogen': { min: 200, max: 400, label: 'mg/dL' },
+            'Platelets': { min: 150, max: 400, label: 'K/µL' },
+            
+            // Demographics
+            'Age': { min: 18, max: 90, label: 'years' },
+            'Gender': { min: 0, max: 1, label: '', isInteger: true },
+            'HospAdmTime': { min: 0, max: 72, label: 'hours' },
+            'ICULOS': { min: 0, max: 120, label: 'hours' }
+        };
+
+        function generateRandomValues() {
+            // Get all input fields
+            const inputs = document.querySelectorAll('input[type="number"]');
+            
+            // Define vital signs and laboratory fields
+            const vitalFields = ['HR', 'O2Sat', 'Temp', 'SBP', 'MAP', 'DBP', 'Resp'];
+            const labFields = ['BaseExcess', 'HCO3', 'FiO2', 'PaCO2', 'SaO2', 'Creatinine', 
+                              'Bilirubin_direct', 'Glucose', 'Lactate', 'Magnesium', 'Phosphate', 
+                              'Bilirubin_total', 'Hgb', 'WBC', 'Fibrinogen', 'Platelets'];
+            const demoFields = ['Age', 'Gender', 'HospAdmTime', 'ICULOS'];
+            
+            // Select exactly 2 random vital fields to be abnormal
+            const abnormalVitalFields = vitalFields.sort(() => Math.random() - 0.5).slice(0, 2);
+            
+            // Select exactly 4 random lab fields to be abnormal
+            const abnormalLabFields = labFields.sort(() => Math.random() - 0.5).slice(0, 4);
+            
+            // Generate all values
+            inputs.forEach(input => {
+                const fieldName = input.name;
+                let result;
+                
+                if (fieldName === 'HospAdmTime' || fieldName === 'ICULOS') {
+                    // For hours fields, ensure they're in range 5-15
+                    result = {
+                        value: parseFloat((Math.random() * 10 + 5).toFixed(2)),
+                        isAbnormal: false
+                    };
+                } else if (fieldName === 'Age') {
+                    // Age: 18-90
+                    result = {
+                        value: Math.round(Math.random() * 72 + 18),
+                        isAbnormal: false
+                    };
+                } else if (fieldName === 'Gender') {
+                    // Gender: 0 or 1
+                    result = {
+                        value: Math.round(Math.random()),
+                        isAbnormal: false
+                    };
+                } else if (abnormalVitalFields.includes(fieldName)) {
+                    // Force abnormal for selected vital fields
+                    result = generateAbnormalValue(fieldName);
+                } else if (abnormalLabFields.includes(fieldName)) {
+                    // Force abnormal for selected lab fields
+                    result = generateAbnormalValue(fieldName);
+                } else {
+                    // Generate normal values for the rest
+                    result = generateNormalValue(fieldName);
+                }
+                
+                if (result && result.value !== '') {
+                    input.value = result.value;
+
+                    // Find the label and add asterisk if abnormal
+                    const inputField = input.closest('.input-field');
+                    if (inputField) {
+                        const label = inputField.querySelector('label');
+                        if (label) {
+                            // Remove existing asterisk
+                            label.textContent = label.textContent.replace(' *', '');
+                            
+                            // Add asterisk if abnormal
+                            if (result.isAbnormal) {
+                                label.textContent += ' *';
+                                label.style.color = '#ff9f43';
+                            } else {
+                                label.style.color = '#ffd700';
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Show a notification with summary
+            const summary = `Random values generated`;
+            showNotification(summary);
+        }
+
+        function generateNormalValue(fieldName) {
+            const range = normalRanges[fieldName];
+            if (!range) return '';
+
+            let value = range.min + (Math.random() * (range.max - range.min));
+
+            if (range.isInteger) {
+                value = Math.round(value);
+            } else {
+                value = parseFloat(value.toFixed(2));
+            }
+
+            return { value, isAbnormal: false };
+        }
+
+        function generateAbnormalValue(fieldName) {
+            const range = normalRanges[fieldName];
+            if (!range) return '';
+
+            let value;
+            // Generate value outside normal range
+            if (Math.random() < 0.5) {
+                // Below normal
+                value = range.min - (Math.random() * (range.max - range.min) * 0.3);
+            } else {
+                // Above normal
+                value = range.max + (Math.random() * (range.max - range.min) * 0.3);
+            }
+
+            if (range.isInteger) {
+                value = Math.round(value);
+            } else {
+                value = parseFloat(value.toFixed(2));
+            }
+
+            return { value, isAbnormal: true };
+        }
+
+        function showNotification(message) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.innerHTML = `
+                <i class="fas fa-info-circle"></i> ${message}
+            `;
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: rgba(255, 215, 0, 0.1);
+                border: 2px solid #ffd700;
+                border-radius: 10px;
+                padding: 15px 20px;
+                color: #ffd700;
+                font-weight: bold;
+                z-index: 10000;
+                animation: slideIn 0.5s ease-out;
+                max-width: 350px;
+            `;
+
+            document.body.appendChild(notification);
+
+            // Remove notification after 4 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.5s ease-out';
+                setTimeout(() => {
+                    notification.remove();
+                }, 500);
+            }, 4000);
+        }
+
         function resetForm() {
+            // Reset all inputs
             document.getElementById('predictionForm').reset();
+            
+            // Remove asterisks and reset label colors
+            const labels = document.querySelectorAll('label');
+            labels.forEach(label => {
+                label.textContent = label.textContent.replace(' *', '');
+                label.style.color = '#ffd700';
+            });
+
             localStorage.removeItem('formValues');
+            showNotification('Form cleared and labels reset.');
         }
 
         // Form submission with loading animation
@@ -357,16 +556,16 @@
 
         // Load form values from localStorage
         window.addEventListener('load', function() {
-            const savedValues = localStorage.getItem('formValues');
-            if (savedValues) {
-                const values = JSON.parse(savedValues);
-                for (let [key, value] of Object.entries(values)) {
-                    const input = document.querySelector(`input[name="${key}"]`);
-                    if (input) {
-                        input.value = value;
-                    }
-                }
-            }
+            // Always start with empty form
+            localStorage.removeItem('formValues');
+            document.getElementById('predictionForm').reset();
+            
+            // Reset all label colors
+            const labels = document.querySelectorAll('label');
+            labels.forEach(label => {
+                label.textContent = label.textContent.replace(' *', '');
+                label.style.color = '#ffd700';
+            });
 
             // Check if there's a prediction result
             const predictionDiv = document.getElementById('predictionResult');
@@ -378,6 +577,33 @@
                 document.getElementById('loadingSpinner').style.display = 'none';
             }
         });
+
+        // Add CSS for animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(400px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(400px);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 
     <!-- Inline result injection from Flask -->
