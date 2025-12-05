@@ -1,0 +1,105 @@
+================================================================================
+PHASE 2 OPTIMIZATION - Trend Features, Cross-Validation, Threshold Tuning
+================================================================================
+
+[1/10] Loading dataset...
+[OK] Dataset loaded: 38809 rows, 41 columns
+
+[2/10] Selecting 27 base features...
+[OK] Selected 27 features
+
+[3/10] IMPROVEMENT 2.1 - Extracting trend features...
+[OK] Added 16 trend features
+[OK] Total features: 43 (27 base + 16 trend)
+
+[4/10] Balancing classes...
+  - Majority (No Sepsis): 37945 samples
+  - Minority (Sepsis): 864 samples
+[OK] After upsampling: 75890 total samples (50-50)
+
+[5/10] Preparing features and labels...
+[OK] Train set: 60712 samples
+[OK] Test set: 15178 samples
+
+[6/10] Normalizing features...
+[OK] Features normalized
+
+[7/10] Training configuration...
+  - Input: 43 features
+  - Architecture: 128-64-32-16-8-2
+  - Activation: relu, Solver: adam
+
+[8/10] Training model...
+[OK] Training complete
+
+[9/10] Cross-Validation (5-Fold)...
+
+CV Results:
+  ACCURACY: 0.9875 +/- 0.0060
+  PRECISION: 0.9758 +/- 0.0113
+  RECALL: 1.0000 +/- 0.0000
+  F1: 0.9877 +/- 0.0058
+  ROC_AUC: 0.9902 +/- 0.0057
+
+[10/10] Threshold Tuning...
+
+ROC Analysis:
+  - ROC-AUC: 0.9946
+  - Optimal Threshold (Youden): 0.7879
+  - Sensitivity: 1.0000
+  - Specificity: 0.9876
+
+================================================================================
+RESULTS - Phase 2
+================================================================================
+
+Performance (Standard 0.5 threshold):
+  [OK] Train Accuracy: 0.9967
+  [OK] Test Accuracy:  0.9924
+  [OK] Precision:      0.9849
+  [OK] Recall:         1.0000
+  [OK] ROC-AUC:        0.9946
+
+Performance (Optimized Threshold 0.7879):
+  [OK] Test Accuracy:  0.9938
+  [OK] Precision:      0.9878
+  [OK] Recall:         1.0000
+  [OK] F1-Score:       0.9938
+
+Model Architecture:
+  [OK] Input features: 43
+  [OK] Layers: 128-64-32-16-8-2
+  [OK] Parameters: 16,402
+
+Confusion Matrix:
+  - TN: 7495, FP: 94
+  - FN: 0, TP: 7589
+
+Saving files...
+[OK] model_phase2.pkl
+[OK] scaler_phase2.pkl
+[OK] threshold_info.pkl
+
+Generating visualizations...
+[OK] roc_curve_phase2.png
+[OK] precision_recall_phase2.png
+[OK] cv_results_phase2.png
+
+================================================================================
+[SUCCESS] PHASE 2 COMPLETE!
+================================================================================
+
+Improvements:
+  - 2.1: Trend Features (16 temporal features)
+  - 2.2: 5-Fold Cross-Validation
+  - 2.3: ROC-based Threshold Tuning
+
+Key Metrics:
+  - Accuracy: 99.38%
+  - Recall: 100.00%
+  - Precision: 98.78%
+  - ROC-AUC: 0.9946
+  - Threshold: 0.7879
+
+Files: model_phase2.pkl, scaler_phase2.pkl, threshold_info.pkl
+================================================================================

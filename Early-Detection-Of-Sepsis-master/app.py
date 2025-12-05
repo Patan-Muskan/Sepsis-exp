@@ -10,15 +10,54 @@ warnings.filterwarnings('ignore')
 
 
 app = Flask(__name__, template_folder='templates', static_folder='static', static_url_path='/static')
-model = pickle.load(open('model.pkl', 'rb'))
 
-# Feature names (27 features)
+# Try to load calibrated model (Random Forest with probability scaling)
+scaling_params = None
+try:
+    model = pickle.load(open('model_calibrated.pkl', 'rb'))
+    scaler = pickle.load(open('scaler_calibrated.pkl', 'rb'))
+    try:
+        scaling_params = pickle.load(open('scaling_params.pkl', 'rb'))
+    except:
+        scaling_params = None
+    print("[INFO] Using Random Forest with linear probability scaling")
+except:
+    # Fallback to Phase 1 model
+    try:
+        model = pickle.load(open('model_phase2.pkl', 'rb'))
+        if model.n_features_in_ == 43:
+            print("[INFO] Phase 2 model requires trend features - switching to Phase 1")
+            model = pickle.load(open('model.pkl', 'rb'))
+        else:
+            print("[INFO] Using Phase 2 model")
+    except:
+        model = pickle.load(open('model.pkl', 'rb'))
+        scaler = pickle.load(open('scaler.pkl', 'rb'))
+        print("[INFO] Using Phase 1 model")
+
+# Load Phase 2 threshold info if available (for reference only)
+try:
+    threshold_info = pickle.load(open('threshold_info.pkl', 'rb'))
+    optimal_threshold = threshold_info.get('optimal_threshold', 0.5)
+except:
+    threshold_info = None
+    optimal_threshold = 0.5
+
+# Base features (27 features)
 FEATURE_NAMES = [
     'HR', 'O2Sat', 'Temp', 'SBP', 'MAP', 'DBP', 'Resp',
     'BaseExcess', 'HCO3', 'FiO2', 'PaCO2', 'SaO2', 'Creatinine',
     'Bilirubin_direct', 'Glucose', 'Lactate', 'Magnesium', 'Phosphate',
     'Bilirubin_total', 'Hgb', 'WBC', 'Fibrinogen', 'Platelets',
     'Age', 'Gender', 'HospAdmTime', 'ICULOS'
+]
+
+# Phase 2 trend features (optional)
+TREND_FEATURES = [
+    'HR_trend_1h', 'HR_volatility', 'O2Sat_trend_1h', 'O2Sat_volatility',
+    'Temp_trend_1h', 'Temp_volatility', 'Lactate_trend_1h', 'Lactate_volatility',
+    'SBP_trend_1h', 'SBP_volatility', 'Creatinine_trend_1h', 'Creatinine_volatility',
+    'WBC_trend_1h', 'WBC_volatility', 'Glucose_trend_1h', 'Glucose_volatility'
 ]
 
 # Clinical reference ranges for warning indicators
@@ -151,14 +190,13 @@ def generate_explanation(features_dict, prediction, confidence):
     adjusted_risk_level = prediction
     adjustment_reason = ""
     
-    if vital_instability['severity_score'] >= 3:
-        # High severity instability detected - escalate to high risk
+    # Only escalate prediction if CRITICAL vital issues exist (very high thresholds)
+    # Don't override model prediction for mild abnormalities
+    if vital_instability['severity_score'] >= 5:
+        # Only escalate if extremely critical (e.g., cardiac shock, severe respiratory distress)
         adjusted_risk_level = 1
-        adjustment_reason = "⚠️ Critical vital sign instability detected - Risk level elevated to HIGH"
-    elif vital_instability['severity_score'] >= 2 and prediction == 0:
-        # Moderate instability with low model prediction - consider it elevated risk
-        adjusted_risk_level = 1
-        adjustment_reason = "⚠️ Significant vital fluctuations detected - Risk level adjusted to MODERATE-HIGH"
+        adjustment_reason = "⚠️ CRITICAL vital sign abnormalities detected - Risk escalated to HIGH"
+    # NOTE: Removed the aggressive escalation that was converting all abnormal values to sepsis risk
     
     html = '<div style="margin-top: 20px;">'
     
@@ -254,6 +292,7 @@ def generate_explanation(features_dict, prediction, confidence):
 def predict():
     '''
     For rendering results on HTML GUI with clinical explanation
+    Supports both Phase 1 (base features) and Phase 2 (base + trend features)
     '''
     try:
         # Get form data
@@ -270,28 +309,54 @@ def predict():
         
         final_features = np.array(features).reshape(1, -1)
         
-        # Make prediction
+        # Apply scaler if available (Phase 1 optimization)
+        if scaler is not None:
+            final_features = scaler.transform(final_features)
+        
+        # Make prediction using model
         prediction = model.predict(final_features)
         probability = model.predict_proba(final_features)[0]
+        
+        # Get raw sepsis probability
+        prob_sepsis_raw = probability[1]
+        
+        # Apply probability scaling if available (full 0-100% range)
+        if scaling_params is not None:
+            prob_min = scaling_params['prob_min']
+            prob_max = scaling_params['prob_max']
+            # Scale to full [0, 1] range for complete 0-100% spread
+            prob_sepsis = (prob_sepsis_raw - prob_min) / (prob_max - prob_min)
+            prob_sepsis = max(0.0, min(1.0, prob_sepsis))  # Clip to [0, 1]
+        else:
+            prob_sepsis = prob_sepsis_raw
+        
+        # Ensure probability is in valid range [0, 1]
+        prob_sepsis = max(0.0, min(1.0, prob_sepsis))
+        prob_no_sepsis = 1 - prob_sepsis
+        
+        # Use 0.5 threshold for binary prediction
+        prediction_tuned = 1 if prob_sepsis >= 0.5 else 0
+        
+        # Display confidence for the predicted class
+        if prediction_tuned == 1:
+            confidence = prob_sepsis * 100
+        else:
+            confidence = prob_no_sepsis * 100
+        model_version = "Calibrated Logistic Regression"
         
         # Get vital instability assessment
         vital_instability = detect_vital_instability(form_data)
         
         # Adjust prediction based on vital instability
-        adjusted_prediction = prediction[0]
-        if vital_instability['severity_score'] >= 3:
-            adjusted_prediction = 1  # Escalate to high risk
-        elif vital_instability['severity_score'] >= 2 and prediction[0] == 0:
-            adjusted_prediction = 1  # Moderate-high risk
-        
-        # Use original confidence, but reflect adjusted prediction
-        confidence = max(probability) * 100
-        if adjusted_prediction == 1 and prediction[0] == 0:
-            # If we adjusted up due to instability, show higher confidence for safety
-            confidence = min(confidence + 15, 95)
+        adjusted_prediction = prediction_tuned
+        if vital_instability['severity_score'] >= 5:
+            adjusted_prediction = 1  # Escalate to high risk only for critical cases
         
         # Determine prediction text
-        prediction_text = "High Risk of Sepsis" if adjusted_prediction == 1 else "Low Risk of Sepsis"
+        if adjusted_prediction == 1:
+            prediction_text = f"High Risk of Sepsis ({confidence:.1f}%)"
+        else:
+            prediction_text = f"Low Risk of Sepsis ({confidence:.1f}% probability of no sepsis)"
         
         # Generate explanation
         explanation_html = generate_explanation(form_data, adjusted_prediction, confidence)
@@ -301,7 +366,8 @@ def predict():
             prediction_text=prediction_text,
             confidence=f"{confidence:.2f}%",
             explanation=explanation_html,
-            risk_level='High Risk' if adjusted_prediction == 1 else 'Low Risk'
+            risk_level='High Risk' if adjusted_prediction == 1 else 'Low Risk',
+            model_version=model_version
         )
     
     except Exception as e:

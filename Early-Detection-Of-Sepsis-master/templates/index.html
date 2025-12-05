@@ -14,9 +14,9 @@
             <div class="header-content">
                 <div class="header-title">
                     <i class="fas fa-heartbeat"></i>
-                    <h1>Sepsis Risk Prediction</h1>
+                    <h1 class="animated-title">Sepsis Risk Prediction</h1>
                 </div>
-                <p class="header-subtitle">AI-Powered Clinical Risk Assessment Dashboard</p>
+                <p class="animated-subtitle">AI-Powered Clinical Risk Assessment Dashboard</p>
             </div>
         </div>
     </header>
@@ -341,7 +341,7 @@
     <script>
         // Normal ranges for each field
         const normalRanges = {
-            // Vital Signs
+            // Vital Signs (tight normal ranges)
             'HR': { min: 60, max: 100, label: 'beats/min' },
             'O2Sat': { min: 95, max: 100, label: '%' },
             'Temp': { min: 36.5, max: 37.5, label: '°C' },
@@ -350,7 +350,7 @@
             'DBP': { min: 60, max: 80, label: 'mmHg' },
             'Resp': { min: 12, max: 20, label: 'breaths/min' },
             
-            // Laboratory Values
+            // Laboratory Values (tight normal ranges)
             'BaseExcess': { min: -3, max: 3, label: 'mmol/L' },
             'HCO3': { min: 22, max: 26, label: 'mmol/L' },
             'FiO2': { min: 21, max: 100, label: '%' },
@@ -372,10 +372,37 @@
             'Age': { min: 18, max: 90, label: 'years' },
             'Gender': { min: 0, max: 1, label: '', isInteger: true },
             'HospAdmTime': { min: 0, max: 72, label: 'hours' },
-            'ICULOS': { min: 0, max: 120, label: 'hours' }
+            'ICULOS': { min: 0, max: 120, label: 'hours' },
+            
+            // Abnormal value ranges (used only for abnormal generation)
+            'HR_abnormal': { min: 30, max: 180, label: 'beats/min' },
+            'Temp_abnormal': { min: 35, max: 41, label: '°C' },
+            'SBP_abnormal': { min: 50, max: 250, label: 'mmHg' },
+            'MAP_abnormal': { min: 40, max: 180, label: 'mmHg' },
+            'DBP_abnormal': { min: 30, max: 150, label: 'mmHg' },
+            'Resp_abnormal': { min: 5, max: 60, label: 'breaths/min' },
+            'Glucose_abnormal': { min: 40, max: 500, label: 'mg/dL' },
+            'WBC_abnormal': { min: 1, max: 150, label: 'K/µL' },
+            'Creatinine_abnormal': { min: 0.3, max: 8, label: 'mg/dL' },
+            'Lactate_abnormal': { min: 0.3, max: 20, label: 'mmol/L' },
+            'Bilirubin_direct_abnormal': { min: 0, max: 5, label: 'mg/dL' },
+            'Bilirubin_total_abnormal': { min: 0, max: 8, label: 'mg/dL' },
+            'Platelets_abnormal': { min: 10, max: 800, label: 'K/µL' },
+            'Hgb_abnormal': { min: 4, max: 25, label: 'g/dL' },
+            'Magnesium_abnormal': { min: 0.5, max: 4.5, label: 'mg/dL' },
+            'Phosphate_abnormal': { min: 0.5, max: 10, label: 'mg/dL' },
+            'Fibrinogen_abnormal': { min: 50, max: 800, label: 'mg/dL' },
+            'BaseExcess_abnormal': { min: -15, max: 15, label: 'mmol/L' },
+            'HCO3_abnormal': { min: 8, max: 40, label: 'mmol/L' },
+            'PaCO2_abnormal': { min: 15, max: 90, label: 'mmHg' }
         };
 
+        // Track number of times random values are generated
+        let randomGenerationCount = 0;
+
         function generateRandomValues() {
+            randomGenerationCount++;
+            
             // Get all input fields
             const inputs = document.querySelectorAll('input[type="number"]');
             
@@ -386,11 +413,15 @@
                               'Bilirubin_total', 'Hgb', 'WBC', 'Fibrinogen', 'Platelets'];
             const demoFields = ['Age', 'Gender', 'HospAdmTime', 'ICULOS'];
             
+            // Always generate 2 abnormal vitals and 4 abnormal lab values
+            const abnormalVitalCount = 2;
+            const abnormalLabCount = 4;
+            
             // Select exactly 2 random vital fields to be abnormal
-            const abnormalVitalFields = vitalFields.sort(() => Math.random() - 0.5).slice(0, 2);
+            const abnormalVitalFields = vitalFields.sort(() => Math.random() - 0.5).slice(0, abnormalVitalCount);
             
             // Select exactly 4 random lab fields to be abnormal
-            const abnormalLabFields = labFields.sort(() => Math.random() - 0.5).slice(0, 4);
+            const abnormalLabFields = labFields.sort(() => Math.random() - 0.5).slice(0, abnormalLabCount);
             
             // Generate all values
             inputs.forEach(input => {
@@ -449,9 +480,8 @@
                 }
             });
 
-            // Show a notification with summary
-            const summary = `Random values generated`;
-            showNotification(summary);
+            // Show a notification
+            showNotification('Random values generated');
         }
 
         function generateNormalValue(fieldName) {
@@ -470,17 +500,37 @@
         }
 
         function generateAbnormalValue(fieldName) {
-            const range = normalRanges[fieldName];
+            // Try to use abnormal range if available, otherwise use normal range offset
+            const abnormalKey = fieldName + '_abnormal';
+            const range = normalRanges[abnormalKey] || normalRanges[fieldName];
             if (!range) return '';
 
             let value;
-            // Generate value outside normal range
-            if (Math.random() < 0.5) {
-                // Below normal
-                value = range.min - (Math.random() * (range.max - range.min) * 0.3);
+            
+            // If we have abnormal range, generate from it
+            if (normalRanges[abnormalKey]) {
+                const abnormalRange = normalRanges[abnormalKey];
+                if (Math.random() < 0.5) {
+                    // Below normal
+                    value = abnormalRange.min + (Math.random() * (range.min - abnormalRange.min) * 0.8);
+                } else {
+                    // Above normal
+                    value = range.max + (Math.random() * (abnormalRange.max - range.max) * 0.8);
+                }
             } else {
-                // Above normal
-                value = range.max + (Math.random() * (range.max - range.min) * 0.3);
+                // Fallback: generate value outside normal range
+                if (Math.random() < 0.5) {
+                    // Below normal
+                    value = range.min - (Math.random() * (range.max - range.min) * 0.3);
+                } else {
+                    // Above normal
+                    value = range.max + (Math.random() * (range.max - range.min) * 0.3);
+                }
+            }
+
+            // Cap O2Sat and SaO2 at max 100
+            if ((fieldName === 'O2Sat' || fieldName === 'SaO2') && value > 100) {
+                value = 100;
             }
 
             if (range.isInteger) {
