@@ -36,7 +36,7 @@
                             <div class="input-icon"><i class="fas fa-heart"></i></div>
                             <div class="input-field">
                                 <label>Heart Rate</label>
-                                <input class="form-control" type="number" name="HR" min="0" step="0.01" placeholder="60-100 bpm">
+                                <input class="form-control" type="number" name="HR" min="0" max="250" step="0.01" placeholder="60-100 bpm">
                                 <span class="input-hint">60-100 bpm</span>
                             </div>
                         </div>
@@ -54,7 +54,7 @@
                             <div class="input-icon"><i class="fas fa-thermometer-half"></i></div>
                             <div class="input-field">
                                 <label>Temperature</label>
-                                <input class="form-control" type="number" name="Temp" min="0" step="0.01" placeholder="36.5-37.5°C">
+                                <input class="form-control" type="number" name="Temp" min="0" max="42" step="0.01" placeholder="36.5-37.5°C">
                                 <span class="input-hint">36.5-37.5°C</span>
                             </div>
                         </div>
@@ -63,7 +63,7 @@
                             <div class="input-icon"><i class="fas fa-arrow-up"></i></div>
                             <div class="input-field">
                                 <label>Systolic BP</label>
-                                <input class="form-control" type="number" name="SBP" min="0" step="0.01" placeholder="90-120 mmHg">
+                                <input class="form-control" type="number" name="SBP" min="0" max="300" step="0.01" placeholder="90-120 mmHg">
                                 <span class="input-hint">90-120 mmHg</span>
                             </div>
                         </div>
@@ -72,7 +72,7 @@
                             <div class="input-icon"><i class="fas fa-gauge"></i></div>
                             <div class="input-field">
                                 <label>Mean Arterial Pressure</label>
-                                <input class="form-control" type="number" name="MAP" min="0" step="0.01" placeholder="70-100 mmHg">
+                                <input class="form-control" type="number" name="MAP" min="0" max="200" step="0.01" placeholder="70-100 mmHg">
                                 <span class="input-hint">70-100 mmHg</span>
                             </div>
                         </div>
@@ -81,7 +81,7 @@
                             <div class="input-icon"><i class="fas fa-arrow-down"></i></div>
                             <div class="input-field">
                                 <label>Diastolic BP</label>
-                                <input class="form-control" type="number" name="DBP" min="0" step="0.01" placeholder="60-80 mmHg">
+                                <input class="form-control" type="number" name="DBP" min="0" max="150" step="0.01" placeholder="60-80 mmHg">
                                 <span class="input-hint">60-80 mmHg</span>
                             </div>
                         </div>
@@ -90,7 +90,7 @@
                             <div class="input-icon"><i class="fas fa-lungs"></i></div>
                             <div class="input-field">
                                 <label>Respiration Rate</label>
-                                <input class="form-control" type="number" name="Resp" min="0" step="0.01" placeholder="12-20 breaths/min">
+                                <input class="form-control" type="number" name="Resp" min="0" max="100" step="0.01" placeholder="12-20 breaths/min">
                                 <span class="input-hint">12-20 breaths/min</span>
                             </div>
                         </div>
@@ -108,7 +108,7 @@
                             <div class="input-icon"><i class="fas fa-test"></i></div>
                             <div class="input-field">
                                 <label>Base Excess</label>
-                                <input class="form-control" type="number" name="BaseExcess" step="0.01" placeholder="-3 to +3 mmol/L">
+                                <input class="form-control" type="number" name="BaseExcess" min="-15" max="15" step="0.01" placeholder="-3 to +3 mmol/L">
                                 <span class="input-hint">-3 to +3 mmol/L</span>
                             </div>
                         </div>
@@ -117,7 +117,7 @@
                             <div class="input-icon"><i class="fas fa-droplet"></i></div>
                             <div class="input-field">
                                 <label>Bicarbonate (HCO₃)</label>
-                                <input class="form-control" type="number" name="HCO3" step="0.01" placeholder="22-26 mmol/L">
+                                <input class="form-control" type="number" name="HCO3" min="8" max="40" step="0.01" placeholder="22-26 mmol/L">
                                 <span class="input-hint">22-26 mmol/L</span>
                             </div>
                         </div>
@@ -135,7 +135,7 @@
                             <div class="input-icon"><i class="fas fa-gauge"></i></div>
                             <div class="input-field">
                                 <label>PaCO₂</label>
-                                <input class="form-control" type="number" name="PaCO2" step="0.01" placeholder="35-45 mmHg">
+                                <input class="form-control" type="number" name="PaCO2" min="15" max="90" step="0.01" placeholder="35-45 mmHg">
                                 <span class="input-hint">35-45 mmHg</span>
                             </div>
                         </div>
@@ -153,7 +153,7 @@
                             <div class="input-icon"><i class="fas fa-flask"></i></div>
                             <div class="input-field">
                                 <label>Creatinine</label>
-                                <input class="form-control" type="number" name="Creatinine" step="0.01" placeholder="0.7-1.3 mg/dL">
+                                <input class="form-control" type="number" name="Creatinine" min="0.3" max="8" step="0.01" placeholder="0.7-1.3 mg/dL">
                                 <span class="input-hint">0.7-1.3 mg/dL</span>
                             </div>
                         </div>
@@ -162,7 +162,7 @@
                             <div class="input-icon"><i class="fas fa-vial"></i></div>
                             <div class="input-field">
                                 <label>Bilirubin Direct</label>
-                                <input class="form-control" type="number" name="Bilirubin_direct" step="0.01" placeholder="0.0-0.3 mg/dL">
+                                <input class="form-control" type="number" name="Bilirubin_direct" min="0" max="5" step="0.01" placeholder="0.0-0.3 mg/dL">
                                 <span class="input-hint">0.0-0.3 mg/dL</span>
                             </div>
                         </div>
@@ -171,7 +171,7 @@
                             <div class="input-icon"><i class="fas fa-candy"></i></div>
                             <div class="input-field">
                                 <label>Glucose</label>
-                                <input class="form-control" type="number" name="Glucose" step="0.01" placeholder="70-100 mg/dL">
+                                <input class="form-control" type="number" name="Glucose" min="40" max="500" step="0.01" placeholder="70-100 mg/dL">
                                 <span class="input-hint">70-100 mg/dL</span>
                             </div>
                         </div>
@@ -180,7 +180,7 @@
                             <div class="input-icon"><i class="fas fa-droplet-slash"></i></div>
                             <div class="input-field">
                                 <label>Lactate</label>
-                                <input class="form-control" type="number" name="Lactate" step="0.01" placeholder="0.5-2.0 mmol/L">
+                                <input class="form-control" type="number" name="Lactate" min="0.3" max="20" step="0.01" placeholder="0.5-2.0 mmol/L">
                                 <span class="input-hint">0.5-2.0 mmol/L</span>
                             </div>
                         </div>
@@ -189,7 +189,7 @@
                             <div class="input-icon"><i class="fas fa-magnet"></i></div>
                             <div class="input-field">
                                 <label>Magnesium</label>
-                                <input class="form-control" type="number" name="Magnesium" step="0.01" placeholder="1.7-2.2 mg/dL">
+                                <input class="form-control" type="number" name="Magnesium" min="0.5" max="4.5" step="0.01" placeholder="1.7-2.2 mg/dL">
                                 <span class="input-hint">1.7-2.2 mg/dL</span>
                             </div>
                         </div>
@@ -198,7 +198,7 @@
                             <div class="input-icon"><i class="fas fa-circle"></i></div>
                             <div class="input-field">
                                 <label>Phosphate</label>
-                                <input class="form-control" type="number" name="Phosphate" step="0.01" placeholder="2.5-4.5 mg/dL">
+                                <input class="form-control" type="number" name="Phosphate" min="0.5" max="10" step="0.01" placeholder="2.5-4.5 mg/dL">
                                 <span class="input-hint">2.5-4.5 mg/dL</span>
                             </div>
                         </div>
@@ -207,7 +207,7 @@
                             <div class="input-icon"><i class="fas fa-vial"></i></div>
                             <div class="input-field">
                                 <label>Bilirubin Total</label>
-                                <input class="form-control" type="number" name="Bilirubin_total" step="0.01" placeholder="0.1-1.2 mg/dL">
+                                <input class="form-control" type="number" name="Bilirubin_total" min="0" max="8" step="0.01" placeholder="0.1-1.2 mg/dL">
                                 <span class="input-hint">0.1-1.2 mg/dL</span>
                             </div>
                         </div>
@@ -216,7 +216,7 @@
                             <div class="input-icon"><i class="fas fa-blood"></i></div>
                             <div class="input-field">
                                 <label>Hemoglobin</label>
-                                <input class="form-control" type="number" name="Hgb" step="0.01" placeholder="13.5-17.5 g/dL">
+                                <input class="form-control" type="number" name="Hgb" min="4" max="25" step="0.01" placeholder="13.5-17.5 g/dL">
                                 <span class="input-hint">13.5-17.5 g/dL</span>
                             </div>
                         </div>
@@ -225,7 +225,7 @@
                             <div class="input-icon"><i class="fas fa-virus"></i></div>
                             <div class="input-field">
                                 <label>White Blood Cells</label>
-                                <input class="form-control" type="number" name="WBC" step="0.01" placeholder="4.5-11 K/µL">
+                                <input class="form-control" type="number" name="WBC" min="1" max="150" step="0.01" placeholder="4.5-11 K/µL">
                                 <span class="input-hint">4.5-11 K/µL</span>
                             </div>
                         </div>
@@ -234,7 +234,7 @@
                             <div class="input-icon"><i class="fas fa-link"></i></div>
                             <div class="input-field">
                                 <label>Fibrinogen</label>
-                                <input class="form-control" type="number" name="Fibrinogen" step="0.01" placeholder="200-400 mg/dL">
+                                <input class="form-control" type="number" name="Fibrinogen" min="50" max="800" step="0.01" placeholder="200-400 mg/dL">
                                 <span class="input-hint">200-400 mg/dL</span>
                             </div>
                         </div>
@@ -243,7 +243,7 @@
                             <div class="input-icon"><i class="fas fa-coins"></i></div>
                             <div class="input-field">
                                 <label>Platelets</label>
-                                <input class="form-control" type="number" name="Platelets" step="0.01" placeholder="150-400 K/µL">
+                                <input class="form-control" type="number" name="Platelets" min="10" max="800" step="0.01" placeholder="150-400 K/µL">
                                 <span class="input-hint">150-400 K/µL</span>
                             </div>
                         </div>
@@ -413,14 +413,25 @@
                               'Bilirubin_total', 'Hgb', 'WBC', 'Fibrinogen', 'Platelets'];
             const demoFields = ['Age', 'Gender', 'HospAdmTime', 'ICULOS'];
             
-            // Always generate 2 abnormal vitals and 4 abnormal lab values
-            const abnormalVitalCount = 2;
-            const abnormalLabCount = 4;
+            // Alternate between HIGH SEPSIS RISK (odd clicks) and LOW SEPSIS RISK (even clicks)
+            const isHighRiskCase = randomGenerationCount % 2 === 1;
             
-            // Select exactly 2 random vital fields to be abnormal
+            let abnormalVitalCount, abnormalLabCount;
+            
+            if (isHighRiskCase) {
+                // HIGH SEPSIS RISK: Many abnormal values (more severe indicators)
+                abnormalVitalCount = 4;  // 4 out of 7 vitals abnormal
+                abnormalLabCount = 7;    // 7 out of 16 labs abnormal
+            } else {
+                // LOW SEPSIS RISK: Few abnormal values (mostly normal)
+                abnormalVitalCount = 0;  // 0 vitals abnormal
+                abnormalLabCount = 1;    // Only 1 lab abnormal
+            }
+            
+            // Select random vital fields to be abnormal
             const abnormalVitalFields = vitalFields.sort(() => Math.random() - 0.5).slice(0, abnormalVitalCount);
             
-            // Select exactly 4 random lab fields to be abnormal
+            // Select random lab fields to be abnormal
             const abnormalLabFields = labFields.sort(() => Math.random() - 0.5).slice(0, abnormalLabCount);
             
             // Generate all values
@@ -480,8 +491,10 @@
                 }
             });
 
-            // Show a notification
-            showNotification('Random values generated');
+            // Show a notification indicating the case type
+            const caseType = isHighRiskCase ? '🔴 HIGH SEPSIS RISK' : '🟢 LOW SEPSIS RISK';
+            showNotification(`Case ${randomGenerationCount}: ${caseType}`);
+            console.log(`Generated Case ${randomGenerationCount}: ${caseType}`);
         }
 
         function generateNormalValue(fieldName) {
@@ -528,9 +541,21 @@
                 }
             }
 
-            // Cap O2Sat and SaO2 at max 100
-            if ((fieldName === 'O2Sat' || fieldName === 'SaO2') && value > 100) {
+            // Cap percentage-based fields at max 100
+            if ((fieldName === 'O2Sat' || fieldName === 'SaO2' || fieldName === 'FiO2') && value > 100) {
                 value = 100;
+            }
+            
+            // Ensure other fields don't exceed their max constraints
+            const fieldMax = {
+                'HR': 250, 'Temp': 42, 'SBP': 300, 'MAP': 200, 'DBP': 150, 'Resp': 100,
+                'BaseExcess': 15, 'HCO3': 40, 'PaCO2': 90, 'Creatinine': 8, 'Glucose': 500,
+                'Lactate': 20, 'Magnesium': 4.5, 'Phosphate': 10, 'Bilirubin_direct': 5,
+                'Bilirubin_total': 8, 'Hgb': 25, 'WBC': 150, 'Fibrinogen': 800, 'Platelets': 800
+            };
+            
+            if (fieldMax[fieldName] && value > fieldMax[fieldName]) {
+                value = fieldMax[fieldName];
             }
 
             if (range.isInteger) {
@@ -662,30 +687,108 @@
         document.addEventListener('DOMContentLoaded', function() {
             const predictionDiv = document.getElementById('predictionResult');
             const resultHTML = `
-                <div class="result-text">
-                    <span class="result-label">Risk Assessment:</span>
-                    <div class="result-value">{{ prediction_text | safe }}</div>
+                <div class="prediction-container">
+                    <!-- Current Risk Card -->
+                    <div class="risk-card current-risk">
+                        <div class="card-header-small">
+                            <i class="fas fa-heartbeat"></i>
+                            <span class="time-label">NOW</span>
+                        </div>
+                        <div class="risk-value-large">{{ confidence | safe }}</div>
+                        <div class="risk-label">Current Sepsis Risk</div>
+                        <div class="risk-status {{ 'high-risk' if 'High Risk' in prediction_text else 'low-risk' }}">
+                            {{ risk_level | safe }}
+                        </div>
+                    </div>
+
+                    <!-- Arrow Divider (Hidden for Normal State) -->
+                    <div class="prediction-arrow" {% if is_normal_state %}style="display: none;"{% endif %}>
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+
+                    <!-- 6-Hour Advance Warning Card (Hidden for Normal State) -->
+                    <div class="risk-card future-risk" {% if is_normal_state %}style="display: none;"{% endif %}>
+                        <div class="card-header-small future">
+                            <i class="fas fa-clock"></i>
+                            <span class="time-label">IN 6 HOURS</span>
+                        </div>
+                        <div class="risk-value-large" id="phase3RiskValue">--</div>
+                        <div class="risk-label">Predicted Risk</div>
+                        <div class="risk-status" id="phase3RiskStatus">
+                            --
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline Visualization (Hidden for Normal State) -->
+                <div class="timeline-section" {% if is_normal_state %}style="display: none;"{% endif %}>
+                    <div class="timeline-header">
+                        <i class="fas fa-hourglass-half"></i>
+                        <h4>6-Hour Advance Warning System</h4>
+                    </div>
+                    <div class="timeline-visualization">
+                        <div class="timeline-point current">
+                            <div class="timeline-circle">0h</div>
+                            <div class="timeline-text">Current Status</div>
+                        </div>
+                        <div class="timeline-line"></div>
+                        <div class="timeline-point future">
+                            <div class="timeline-circle">6h</div>
+                            <div class="timeline-text">Predicted Status</div>
+                        </div>
+                        <div class="timeline-line"></div>
+                        <div class="timeline-point future">
+                            <div class="timeline-circle">24h</div>
+                            <div class="timeline-text">Extended View</div>
+                        </div>
+                    </div>
+                    <div class="timeline-insight">
+                        <i class="fas fa-lightbulb"></i>
+                        <p><strong>Key Feature:</strong> This system analyzes current vital signs and laboratory values to predict sepsis risk up to 6-7 hours in advance, enabling early intervention before clinical deterioration.</p>
+                    </div>
+                </div>
+
+                <!-- Clinical Details -->
+                <div class="clinical-details-card">
+                    <div class="details-header">
+                        <i class="fas fa-stethoscope"></i>
+                        <h4>Clinical Assessment</h4>
+                    </div>
+                    <div class="details-content">
+                        {{ explanation | safe }}
+                    </div>
                 </div>
             `;
             predictionDiv.innerHTML = resultHTML;
             
-            {% if confidence %}
-            const confidenceHTML = `<p class="confidence-text"><strong>Confidence:</strong> <span>{{ confidence | safe }}</span></p>`;
-            predictionDiv.innerHTML += confidenceHTML;
-            {% endif %}
+            // Use backend-calculated phase3_risk (based on trend analysis)
+            const phase3RiskRaw = '{{ phase3_risk | default("") }}';
+            const phase3RiskValue = parseFloat(phase3RiskRaw);
+            
+            console.log('[DEBUG] Phase 3 Risk (from backend):', phase3RiskRaw);
+            console.log('[DEBUG] Phase 3 Risk Parsed:', phase3RiskValue);
+            
+            if (phase3RiskRaw !== '' && !isNaN(phase3RiskValue)) {
+                const phase3Percent = (phase3RiskValue * 100).toFixed(1);
+                console.log('[DEBUG] Phase 3 Percent:', phase3Percent);
+                
+                document.getElementById('phase3RiskValue').textContent = phase3Percent + '%';
+                
+                const statusDiv = document.getElementById('phase3RiskStatus');
+                if (phase3RiskValue >= 0.5) {
+                    statusDiv.textContent = 'HIGH ALERT';
+                    statusDiv.className = 'risk-status high-alert';
+                } else {
+                    statusDiv.textContent = 'STABLE OUTLOOK';
+                    statusDiv.className = 'risk-status stable-outlook';
+                }
+            } else {
+                console.log('[WARNING] Phase 3 risk not available');
+            }
             
             document.getElementById('resultSection').style.display = 'block';
             document.getElementById('loadingSpinner').style.display = 'none';
-            
-            {% if explanation %}
-            document.getElementById('explanationSection').style.display = 'block';
-            document.getElementById('explanation').innerHTML = `{{ explanation | safe }}`;
-            {% endif %}
-            
-            // Scroll to result
-            setTimeout(() => {
-                predictionDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 300);
+            predictionDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
         {% endif %}
     </script>
